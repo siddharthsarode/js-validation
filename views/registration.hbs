@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{>_cssLink}}
+    <title>Student Registration Form</title>
+</head>
+
+<body>
+    {{>_navbar}}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 form-container bg-light rounded shadow p-4 mx-auto">
+                <h2 class="mb-4 text-center">Student Registration Form</h2>
+                <form id="registration-form" method="POST" action="/registration">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="first_name" required>
+                        <small class="error-show text-danger"></small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="last_name" required>
+                        <small class="error-show text-danger"></small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <small class="error-show text-danger"></small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" maxlength="10" required>
+                        <small class="error-show text-danger"></small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="" disabled selected>Select your gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <small class="error-show text-danger"></small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password"
+                            required>
+                        <small class="error-show text-danger"></small>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{!-- js file link --}}
+    {{>_jsLink}}
+    <script src="../js/navbar.js"></script>
+    <script src="../js/regiValidate.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{>_cssLink}}
+    <title>Student Login Form</title>
+</head>
+
+<body>
+    {{>_navbar}}
+    <div class="container mt-5">
+        <div class="form-container bg-light rounded w-50 p-5 shadow mx-auto">
+            <h2 class="mb-4 text-center">Login</h2>
+            <form autocomplete="off" method="POST" action="/login">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+        </div>
+    </div>
+
+    {{!-- js file link --}}
+    {{>_jsLink}}
+    <script src="../js/navbar.js"></script>
+
+</body>
+
+</html>
