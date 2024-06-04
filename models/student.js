@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
 
 const studentSchema = new mongoose.Schema({
     fname: {
@@ -44,11 +45,31 @@ const studentSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    tokens: [{
+        token: {
+            type: String,
+            required: true,
+        }
+    }],
     created_at: {
         type: Date,
         default: Date.now,
     }
 });
+
+// Generate token using object instance of Student Schema
+studentSchema.methods.generateAuthToken = async function () {
+    try {
+        const token = jwt.sign({ _id: this._id.toString() }, "thisismysecretekeysiddharthsarodehellogoodmorning");
+        this.tokens = this.tokens.concat({ token });
+        await this.save();
+        console.log(token);
+        return token;
+    } catch (error) {
+        console.log("method function Error", error);
+        throw new Error("Token generation failed");
+    }
+}
 
 const Student = mongoose.model("Student", studentSchema);
 
