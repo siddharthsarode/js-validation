@@ -5,15 +5,18 @@ const port = process.env.PORT || 3000;
 const path = require("path");
 const hbs = require("hbs");
 const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
 
 // Local Files
 require("./database/config");
 const Student = require("./models/student");
+const auth = require("./middleware/auth");
 
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, './views/partials'));
@@ -26,11 +29,15 @@ app.get("/registration", (req, res) => {
     res.render("registration");
 });
 
+app.get("/hide", auth, (req, res) => {
+    console.log("My cookie", req.cookies.loginCookie);
+    res.render("hide");
+})
 
 
 
 // Add Student data
-app.post("/registration", async (req, res) => {
+app.post("/registration", auth, async (req, res) => {
     try {
         const { first_name, last_name, phone, email, password, gender } = req.body;
         // Convert password into hashed password
@@ -46,7 +53,13 @@ app.post("/registration", async (req, res) => {
         });
 
         const token = await newStudent.generateAuthToken(); // it is defined by user on models/student.js schema
-        console.log(token);
+        // console.log(token);
+
+        res.cookie("jwt", token, {
+            expires: new Date(Date.now() + (30000 * 80000)),
+            httpOnly: true,
+        });
+
         const result = await newStudent.save();
         console.log(result);
         res.redirect("/");
@@ -75,6 +88,12 @@ app.post("/login", async (req, res) => {
         const token = await student.generateAuthToken(); // it is defined by user on models/student.js schema
         console.log(token);
 
+
+        res.cookie("jwt", token, {
+            expires: new Date(Date.now() + (1000 * 80000)),
+            httpOnly: true,
+        });
+
         if (isPassMatch) {
             res.status(201).redirect("/");
         } else {
@@ -85,6 +104,7 @@ app.post("/login", async (req, res) => {
         res.status(400).send("Invalid login credentials");
     }
 })
+
 
 app.listen(port, (err) => {
     if (err) console.log(err);
