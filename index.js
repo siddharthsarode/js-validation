@@ -29,10 +29,42 @@ app.get("/registration", (req, res) => {
     res.render("registration");
 });
 
+// Hide page access using Authentication
 app.get("/hide", auth, (req, res) => {
     console.log("My cookie", req.cookies.loginCookie);
     res.render("hide");
-})
+});
+
+// create logout 
+
+// Logout route
+app.get('/logout', auth, async (req, res) => {
+    try {
+        // Filter out the current token from the user's tokens array
+        // This effectively logs out the user by removing the token used for authentication
+        req.student.tokens = req.student.tokens.filter((currEl) => {
+            return currEl.token !== req.token;
+        });
+
+        // Remove from all device
+        // req.student.tokens = [];
+
+        // Clear the authentication cookie
+        res.clearCookie('jwt');
+
+        // Redirect the user to the login page
+        res.status(200).redirect("/login");
+
+        // Save the updated user data to the database
+        await req.student.save();
+
+        // Log a message indicating a successful logout
+        console.log("Logout");
+    } catch (err) {
+        // Log any errors that occur during the logout process
+        console.log(err);
+    }
+});
 
 
 
